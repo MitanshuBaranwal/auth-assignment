@@ -9,8 +9,10 @@ import org.joda.time.DateTime
 
 object UserTable : Table() {
     val id: Column<Int> = integer("id").autoIncrement()
+    val username: Column<String> = varchar("username", 255)
     val email: Column<String> = varchar("email", 100).uniqueIndex()
     val password: Column<String> = varchar("password", 255)
+    val contact_number: Column<String> = varchar("contact_number", 15)
     override val primaryKey = PrimaryKey(id)
 }
 
@@ -26,7 +28,9 @@ object OTPTable : Table("OTP") {
 fun ResultRow.toUser() = User(
     id = this[UserTable.id],
     email = this[UserTable.email],
-    password = this[UserTable.password]
+    password = this[UserTable.password],
+    username = this[UserTable.username],
+    contact_number = this[UserTable.contact_number]
 )
 
 fun ResultRow.toOTP() = OTP(

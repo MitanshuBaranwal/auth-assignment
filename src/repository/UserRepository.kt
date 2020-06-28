@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 interface UserRepository {
     suspend fun selectUser(email: String, password: String): User?
-    suspend fun insertUser(email: String, password: String)
+    suspend fun insertUser(email: String, password: String, username : String, contact_number : String)
     suspend fun findUser(email: String): User?
     suspend fun verifyOTP(otp: String, email: String): OTP?
     suspend fun insertOTP(otp: String, email: String)
@@ -25,11 +25,13 @@ class UserRepositoryImpl : UserRepository {
         }
 
 
-    override suspend fun insertUser(email: String, password: String) {
+    override suspend fun insertUser(email: String, password: String, username : String, contact_number : String) {
         transaction {
             val statement = UserTable.insert {
                 it[UserTable.email] = email
                 it[UserTable.password] = password
+                it[UserTable.username] = username
+                it[UserTable.contact_number] = contact_number
             }
             statement.resultedValues ?: throw IllegalStateException("Generated id is null.")
         }

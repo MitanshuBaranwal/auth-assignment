@@ -67,8 +67,8 @@ fun Application.module(testing: Boolean = false) {
                         call.respondText(status = HttpStatusCode.Conflict, text = "User exist")
                     } ?: let {
                         try {
-                            repo.insertUser(writeUser.email, hashPassword(writeUser.password))
-                            call.respond(writeUser)
+                                repo.insertUser(writeUser.email, hashPassword(writeUser.password), writeUser.username, writeUser.contact_number)
+                                call.respondText(status = HttpStatusCode.OK, text = "Success")
                         } catch (exception: Exception) {
                             call.respond(HttpStatusCode.BadRequest)
                         }
@@ -95,7 +95,7 @@ fun Application.module(testing: Boolean = false) {
                     val writeOTP = call.receive<OTPWrite>()
                     repo.verifyOTP(writeOTP.otp, writeOTP.email)?.let {
 
-                        call.respondText(status = HttpStatusCode.OK, text = writeOTP.email)
+                        call.respondText(status = HttpStatusCode.OK, text = "hi "+ writeOTP.email+ " Your login is Successful")
                     } ?: let {
                         call.respondText(status = HttpStatusCode.Forbidden, text = "Failed")
                     }
