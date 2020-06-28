@@ -30,7 +30,7 @@ import java.io.File
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 val mailer by lazy {
-    ConfigLoader.loadProperties(File("../properties/mail.properties"), false)
+    ConfigLoader.loadProperties(File("/Users/mitanshubaranwal/Downloads/auth-ktor-assignment/properties/mail.properties"), false)
     MailerBuilder
         .withSMTPServer("smtp.mailtrap.io", 587, "44c2af0f7c0a0e", "a583530be8fd84")
         .withTransportStrategy(TransportStrategy.SMTP_TLS)
@@ -57,7 +57,7 @@ fun Application.module(testing: Boolean = false) {
         }
         Database.connect(
             "jdbc:mysql://localhost/userauth", driver = "com.mysql.jdbc.Driver",
-            user = "root", password = "auth123"
+            user = "root", password = "Rr123456@"
         )
         routing {
             route("api/signup") {
@@ -95,7 +95,7 @@ fun Application.module(testing: Boolean = false) {
                     val writeOTP = call.receive<OTPWrite>()
                     repo.verifyOTP(writeOTP.otp, writeOTP.email)?.let {
 
-                        call.respondText(status = HttpStatusCode.OK, text = "Success")
+                        call.respondText(status = HttpStatusCode.OK, text = writeOTP.email)
                     } ?: let {
                         call.respondText(status = HttpStatusCode.Forbidden, text = "Failed")
                     }
